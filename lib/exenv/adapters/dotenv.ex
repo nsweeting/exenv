@@ -18,8 +18,6 @@ defmodule Exenv.Adapters.Dotenv do
   """
   use Exenv.Adapter
 
-  @default_opts [file: File.cwd!() <> "/.env"]
-
   @doc """
   Loads the system env vars from a `.env` specified in the options.
 
@@ -32,11 +30,17 @@ defmodule Exenv.Adapters.Dotenv do
   """
   @impl true
   def load(opts) do
-    env_file = @default_opts |> Keyword.merge(opts) |> Keyword.get(:file)
+    env_file = get_env_file(opts)
 
     with {:ok, env_vars} <- parse(env_file) do
       System.put_env(env_vars)
     end
+  end
+
+  def get_env_file(opts) do
+    [file: File.cwd!() <> "/.env"]
+    |> Keyword.merge(opts)
+    |> Keyword.get(:file)
   end
 
   defp parse(env_file) do

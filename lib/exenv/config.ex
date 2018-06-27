@@ -2,7 +2,7 @@ defmodule Exenv.Config do
   @moduledoc false
 
   @default_config [
-    start_on_application: false,
+    start_on_application: true,
     adapters: [
       {Exenv.Adapters.Dotenv, []}
     ]
