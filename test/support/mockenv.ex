@@ -23,13 +23,8 @@ defmodule Exenv.Adapters.Mockenv do
 
       @impl true
       def handle_call(:load, _from, config) do
-        mock_reciever = Config.get(:mock_reciever)
         env_vars = Keyword.get(config, :env_vars, [])
-
-        if mock_reciever do
-          send(mock_reciever, {__MODULE__, env_vars})
-        end
-
+        System.put_env(env_vars)
         {:reply, :ok, config}
       end
     end

@@ -71,14 +71,14 @@ from the `child_spec/1` callback.
 config :exenv, [
   start_on_application: false,
   adapters: [
-    {Exenv.Adapters.Exenv, [file: "path/to/.env"]}
+    {Exenv.Adapters.Dotenv, [file: "path/to/.env"]}
   ]
 ]
 ```
 
 ```elixir
 children = [
-  {Exenv, [adapters: [{Exenv.Adapters.Exenv, [file: "path/to/.env"]}]]}
+  {Exenv, [adapters: [{Exenv.Adapters.Dotenv, [file: "path/to/.env"]}]]}
 ]
 
 Supervisor.init(children, strategy: :one_for_one)
@@ -94,7 +94,7 @@ You can override this behaviour on a per-adapter basis, by simply passing the
 ```elixir
 [
   adapters: [
-    {Exenv.Adapters.Exenv, [autoload: false, file: "path/to/.env"]}
+    {Exenv.Adapters.Dotenv, [autoload: false, file: "path/to/.env"]}
   ]
 ]
 ```

@@ -16,6 +16,7 @@ defmodule Exenv.Adapters.Dotenv do
   By default, this adapter is set to start automatically on `Exenv` startup.
 
   """
+
   use Exenv.Adapter
 
   @doc """

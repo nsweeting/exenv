@@ -3,39 +3,44 @@ defmodule ExenvTest do
 
   import Exenv.Helpers
 
+  @test_vars [
+    {"FOO", "bar"},
+    {"BAR", "baz"}
+  ]
+
+  setup do
+    reset_env_vars(@test_vars)
+
+    :ok
+  end
+
   describe "load/0" do
     test "will load env vars from the adapters" do
       setup_exenv([
         adapters: [
-          {Exenv.Adapters.Mockenv.One, [env_vars: [{"FOO", "bar"}]]},
-          {Exenv.Adapters.Mockenv.Two, [env_vars: [{"BAR", "baz"}]]},
+          {Exenv.Adapters.Mockenv.One, [autoload: false, env_vars: [{"FOO", "bar"}]]},
+          {Exenv.Adapters.Mockenv.Two, [autoload: false, env_vars: [{"BAR", "baz"}]]},
         ]
       ])
-      setup_mock_reciever()
 
-      refute_receive({Exenv.Adapters.Mockenv.One, [{"FOO", "bar"}]})
-      refute_receive({Exenv.Adapters.Mockenv.Two, [{"BAR", "baz"}]})
+      refute_vars(@test_vars)
 
       Exenv.load()
 
-      assert_receive({Exenv.Adapters.Mockenv.One, [{"FOO", "bar"}]})
-      assert_receive({Exenv.Adapters.Mockenv.Two, [{"BAR", "baz"}]})
+      assert_vars(@test_vars)
     end
 
     test "will autoload env vars if the option is specified" do
-      refute_receive({Exenv.Adapters.Mockenv.One, [{"FOO", "bar"}]})
-      refute_receive({Exenv.Adapters.Mockenv.Two, [{"BAR", "baz"}]})
+      refute_vars(@test_vars)
 
-      setup_mock_reciever()
       setup_exenv([
         adapters: [
-          {Exenv.Adapters.Mockenv.One, [auto_load: true, env_vars: [{"FOO", "bar"}]]},
-          {Exenv.Adapters.Mockenv.Two, [auto_load: true, env_vars: [{"BAR", "baz"}]]},
+          {Exenv.Adapters.Mockenv.One, [autoload: true, env_vars: [{"FOO", "bar"}]]},
+          {Exenv.Adapters.Mockenv.Two, [autoload: true, env_vars: [{"BAR", "baz"}]]},
         ]
       ])
 
-      assert_receive({Exenv.Adapters.Mockenv.One, [{"FOO", "bar"}]})
-      assert_receive({Exenv.Adapters.Mockenv.Two, [{"BAR", "baz"}]})
+      assert_vars(@test_vars)
     end
 
     test "will return the results of each adapter" do
@@ -54,21 +59,17 @@ defmodule ExenvTest do
     test "will async load env vars from the adapters" do
       setup_exenv([
         adapters: [
-          {Exenv.Adapters.Mockenv.One, [env_vars: [{"FOO", "bar"}]]},
-          {Exenv.Adapters.Mockenv.Two, [env_vars: [{"BAR", "baz"}]]},
+          {Exenv.Adapters.Mockenv.One, [autoload: false, env_vars: [{"FOO", "bar"}]]},
+          {Exenv.Adapters.Mockenv.Two, [autoload: false, env_vars: [{"BAR", "baz"}]]},
         ]
       ])
-      setup_mock_reciever()
 
-      refute_receive({Exenv.Adapters.Mockenv.One, [{"FOO", "bar"}]})
-      refute_receive({Exenv.Adapters.Mockenv.Two, [{"BAR", "baz"}]})
-
+      refute_vars(@test_vars)
       assert Exenv.async_load() == :ok
 
       :timer.sleep(100)
 
-      assert_receive({Exenv.Adapters.Mockenv.One, [{"FOO", "bar"}]})
-      assert_receive({Exenv.Adapters.Mockenv.Two, [{"BAR", "baz"}]})
+      assert_vars(@test_vars)
     end
   end
 end

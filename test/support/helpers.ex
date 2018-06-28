@@ -2,8 +2,6 @@ defmodule Exenv.Helpers do
   import ExUnit.Assertions
   import ExUnit.Callbacks
 
-  alias Exenv.Config
-
   def refute_vars(test_vars) do
     for {key, val} <- test_vars do
       refute_var(key, val)
@@ -35,9 +33,5 @@ defmodule Exenv.Helpers do
     on_exit(fn ->
       Process.exit(pid, :kill)
     end)
-  end
-
-  def setup_mock_reciever do
-    Config.set(:mock_reciever, self())
   end
 end
