@@ -1,5 +1,9 @@
 # Exenv
 
+[![Build Status](https://travis-ci.org/nsweeting/exenv.svg?branch=master)](https://travis-ci.org/nsweeting/exenv)
+[![Exenv Version](https://img.shields.io/hexpm/v/exenv.svg)](https://hex.pm/packages/exenv)
+
+
 Exenv provides an adapter-based solution to loading environment variables from
 external sources.
 
