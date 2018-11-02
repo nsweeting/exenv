@@ -63,7 +63,7 @@ defmodule Exenv.Adapters.Dotenv do
   defp parse_line(line) do
     line
     |> String.trim()
-    |> String.split("=")
+    |> String.split("=", parts: 2)
     |> List.to_tuple()
   end
 

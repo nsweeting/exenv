@@ -8,11 +8,12 @@ defmodule Exenv.Adapters.DotenvTest do
   @test_dotenv File.cwd!() <> "/test/fixtures/dotenv.env"
   @test_vars [
     {"GOOD_KEY1", "foo"},
-    {"GOOD_KEY2", "bar"}
+    {"GOOD_KEY2", "bar"},
+    {"GOOD_KEY3", "baz="}
   ]
 
   setup do
-    setup_exenv([adapters: [{Exenv.Adapters.Dotenv, []}]])
+    setup_exenv(adapters: [{Exenv.Adapters.Dotenv, []}])
     reset_env_vars(@test_vars)
 
     :ok
