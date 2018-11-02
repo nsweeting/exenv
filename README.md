@@ -18,7 +18,7 @@ This package can be installed by adding `exenv` to your list of dependencies in 
 ```elixir
 def deps do
   [
-    {:exenv, "~> 0.1.1"}
+    {:exenv, "~> 0.1.2"}
   ]
 end
 ```
