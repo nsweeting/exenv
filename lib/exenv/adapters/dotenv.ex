@@ -22,12 +22,10 @@ defmodule Exenv.Adapters.Dotenv do
   @doc """
   Loads the system env vars from a `.env` specified in the options.
 
-  ## Parameters
-    - options: A keyword list of options.
-
   ## Options
     * `:file` - the file path in which to read the `.env` from. By default this
     is a `.env` file in your projects root directory.
+
   """
   @impl true
   def load(opts) do
@@ -38,6 +36,7 @@ defmodule Exenv.Adapters.Dotenv do
     end
   end
 
+  @doc false
   def get_env_file(opts) do
     [file: File.cwd!() <> "/.env"]
     |> Keyword.merge(opts)

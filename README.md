@@ -3,13 +3,16 @@
 [![Build Status](https://travis-ci.org/nsweeting/exenv.svg?branch=master)](https://travis-ci.org/nsweeting/exenv)
 [![Exenv Version](https://img.shields.io/hexpm/v/exenv.svg)](https://hex.pm/packages/exenv)
 
-
 Exenv provides an adapter-based solution to loading environment variables from
 external sources.
 
-It currently only has support for the following adapter:
+It comes with the following adapter:
 
 * `Exenv.Adapters.Dotenv` (load from .env files)
+
+But has support from external adapters as well:
+
+* [Exenv.Adapters.YAML](https://github.com/nsweeting/exenv_yaml) (load from .yml files)
 
 ## Installation
 
@@ -18,7 +21,7 @@ This package can be installed by adding `exenv` to your list of dependencies in 
 ```elixir
 def deps do
   [
-    {:exenv, "~> 0.1.2"}
+    {:exenv, "~> 0.2"}
   ]
 end
 ```
@@ -108,4 +111,3 @@ You can then manually load all env vars from your defined adapters:
 ```elixir
 Exenv.load()
 ```
- 
