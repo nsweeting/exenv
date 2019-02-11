@@ -29,9 +29,6 @@ defmodule Exenv.Helpers do
   end
 
   def setup_exenv(opts \\ []) do
-    {:ok, pid} = Exenv.start_link(opts)
-    on_exit(fn ->
-      Process.exit(pid, :kill)
-    end)
+    start_supervised({Exenv.Supervisor, opts})
   end
 end

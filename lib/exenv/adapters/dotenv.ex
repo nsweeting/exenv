@@ -38,6 +38,7 @@ defmodule Exenv.Adapters.Dotenv do
     end
   end
 
+  @doc false
   def get_env_file(opts) do
     [file: File.cwd!() <> "/.env"]
     |> Keyword.merge(opts)

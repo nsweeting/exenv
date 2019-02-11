@@ -22,10 +22,6 @@ defmodule Exenv.Server do
     GenServer.call(__MODULE__, :load)
   end
 
-  def async_load do
-    GenServer.cast(__MODULE__, :load)
-  end
-
   def init(config) do
     config |> get_autoload_adapters() |> Exenv.load()
     {:ok, config}

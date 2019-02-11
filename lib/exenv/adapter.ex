@@ -56,18 +56,18 @@ defmodule Exenv.Adapter do
   @doc """
   Starts the adapter process if required.
   """
-  @callback start_link(opts :: keyword) :: GenServer.on_start()
+  @callback start_link(opts :: keyword()) :: GenServer.on_start()
 
   @doc """
   Loads the system env vars using the adapter and options provided.
   """
-  @callback load(opts :: keyword) :: result
+  @callback load(opts :: keyword()) :: result()
 
-  @type t :: module
+  @type t :: module()
 
-  @type config :: {Exenv.Adapter.t(), keyword}
+  @type config :: {Exenv.Adapter.t(), keyword()}
 
-  @type result :: :ok | {:error, term}
+  @type result :: :ok | {:error, term()}
 
   defmacro __using__(_) do
     quote do
@@ -87,7 +87,7 @@ defmodule Exenv.Adapter do
       end
 
       @doc false
-      def load(opts) do
+      def load(_opts) do
         {:error, :not_implemented}
       end
 
