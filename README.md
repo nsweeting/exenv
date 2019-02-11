@@ -108,4 +108,3 @@ You can then manually load all env vars from your defined adapters:
 ```elixir
 Exenv.load()
 ```
- 
