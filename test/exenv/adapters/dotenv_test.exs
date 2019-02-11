@@ -1,7 +1,7 @@
 defmodule Exenv.Adapters.DotenvTest do
   use ExUnit.Case
 
-  import Exenv.Helpers
+  import Exenv.Test
 
   alias Exenv.Adapters.Dotenv
 

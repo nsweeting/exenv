@@ -1,7 +1,7 @@
 defmodule ExenvTest do
   use ExUnit.Case
 
-  import Exenv.Helpers
+  import Exenv.Test
 
   @test_vars [
     {"FOO", "bar"},
