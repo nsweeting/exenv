@@ -12,7 +12,7 @@ It comes with the following adapter:
 
 But has support from external adapters as well:
 
-* [Exenv.Adapters.YAML](https://github.com/nsweeting/exenv_yaml) (load from .yml files)
+* [Exenv.Adapters.Yaml](https://github.com/nsweeting/exenv_yaml) (load from .yml files)
 
 ## Installation
 
