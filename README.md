@@ -63,7 +63,6 @@ config :exenv, start_on_application: false
 
 Which allows you to add `Exenv` to your own application.
 
-
 ```elixir
 defmodule MySupervisor do
   use Supervisor
