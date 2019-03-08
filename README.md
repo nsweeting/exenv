@@ -43,15 +43,26 @@ the `.env` file required to be within your projects root directory.
 
 If you need finer grained control of things, `Exenv` provides extensive config mechansims.
 
-If you do not want `Exenv` to start on application start, simply add the following line to
-you `config.exs` file.
+We can pass configuration options to `Exenv` from application config.
+
+```elixir
+config :exenv, [
+  start_on_application: false,
+  adapters: [
+    {Exenv.Adapters.Dotenv, [file: "path/to/.env"]}
+  ]
+]
+```
+
+You can also run `Exenv` via your own supervision tree. In this case, you must instruct
+`Exenv` not to start itself.
 
 ```elixir
 config :exenv, start_on_application: false
 ```
 
-If you choose to do the above, you will be responsble for adding `Exenv` to your own
-supervision tree.
+Which allows you to add `Exenv` to your own application.
+
 
 ```elixir
 defmodule MySupervisor do
@@ -63,32 +74,12 @@ defmodule MySupervisor do
 
   def init(:ok) do
     children = [
-      {Exenv, []}
+      {Exenv, [adapters: [{Exenv.Adapters.Dotenv, [file: "path/to/.env"]}]]}
     ]
 
     Supervisor.init(children, strategy: :one_for_one)
   end
 end
-```
-
-We can pass configuration options to `Exenv` from application config, or directly
-from the `child_spec/1` callback.
-
-```elixir
-config :exenv, [
-  start_on_application: false,
-  adapters: [
-    {Exenv.Adapters.Dotenv, [file: "path/to/.env"]}
-  ]
-]
-```
-
-```elixir
-children = [
-  {Exenv, [adapters: [{Exenv.Adapters.Dotenv, [file: "path/to/.env"]}]]}
-]
-
-Supervisor.init(children, strategy: :one_for_one)
 ```
 
 Options passed to the `child_spec/1` callback take precedence over any application
@@ -106,7 +97,7 @@ You can override this behaviour on a per-adapter basis, by simply passing the
 ]
 ```
 
-You can then manually load all env vars from your defined adapters:
+You must then manually load all env vars from your defined adapters:
 
 ```elixir
 Exenv.load()

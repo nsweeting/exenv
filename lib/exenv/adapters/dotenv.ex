@@ -9,7 +9,7 @@ defmodule Exenv.Adapters.Dotenv do
       KEY3=val
 
   Assuming we have the above file in our project root directory, we would be
-  able to access any of the above environment vars.
+  able to access any of the above env vars.
 
       System.get_env("KEY1")
 
@@ -36,8 +36,8 @@ defmodule Exenv.Adapters.Dotenv do
     end
   end
 
-  @doc false
-  def get_env_file(opts) do
+
+  defp get_env_file(opts) do
     [file: File.cwd!() <> "/.env"]
     |> Keyword.merge(opts)
     |> Keyword.get(:file)
