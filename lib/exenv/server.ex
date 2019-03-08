@@ -3,6 +3,7 @@ defmodule Exenv.Server do
 
   use GenServer
 
+  @spec start_link(any()) :: GenServer.on_start()
   def start_link(config \\ []) do
     GenServer.start_link(__MODULE__, config, name: __MODULE__)
   end
@@ -14,19 +15,25 @@ defmodule Exenv.Server do
     }
   end
 
+  @spec set_adapters(any()) :: :ok
   def set_adapters(adapters) do
     GenServer.call(__MODULE__, {:set_adapters, adapters})
   end
 
+  @spec load() :: Exenv.on_load()
   def load do
     GenServer.call(__MODULE__, :load)
   end
 
+  @doc false
+  @impl true
   def init(config) do
     config |> get_autoload_adapters() |> Exenv.load()
     {:ok, config}
   end
 
+  @doc false
+  @impl true
   def handle_call({:set_adapters, adapters}, _from, config) do
     config = Keyword.merge(config, adapters: adapters)
     {:reply, :ok, config}
@@ -35,11 +42,6 @@ defmodule Exenv.Server do
   def handle_call(:load, _from, config) do
     results = do_load(config)
     {:reply, results, config}
-  end
-
-  def handle_cast(:load, config) do
-    do_load(config)
-    {:noreply, config}
   end
 
   defp get_autoload_adapters(config) do
