@@ -47,7 +47,6 @@ We can pass configuration options to `Exenv` from application config.
 
 ```elixir
 config :exenv, [
-  start_on_application: false,
   adapters: [
     {Exenv.Adapters.Dotenv, [file: "path/to/.env"]}
   ]
