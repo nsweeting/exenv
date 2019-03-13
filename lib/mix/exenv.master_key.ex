@@ -28,9 +28,7 @@ defmodule Mix.Tasks.Exenv.MasterKey do
   end
 
   defp sanitize_path(path) do
-    path = if String.first(path) == "/", do: path, else: "/#{path}"
-    path = if String.last(path) == "/", do: path, else: "#{path}/"
-    path
+    if String.first(path) == "/", do: path, else: "/#{path}"
   end
 
   defp add_gitignore(path) do
