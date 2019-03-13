@@ -21,7 +21,7 @@ This package can be installed by adding `exenv` to your list of dependencies in 
 ```elixir
 def deps do
   [
-    {:exenv, "~> 0.2"}
+    {:exenv, "~> 0.3"}
   ]
 end
 ```
@@ -99,4 +99,52 @@ You must then manually load all env vars from your defined adapters:
 
 ```elixir
 Exenv.load()
+```
+
+## Encryption
+
+Exenv has secrets encryption out of the box. Support will depend on the whether
+the adapter provides it. Using secrets encryption allows you to keep an encrypted
+version of your secrets checked into your repository. As long as the master key
+is accessible, these secrets can then be decrypted.
+
+To get started with secrets encryption, first generate a master key.
+
+```bash
+mix exenv.master_key /config/master.key
+```
+
+This will generate a new master key at `/config/master.key`. You can then encrypt
+your secrets file.
+
+```bash
+mix exenv.encrypt /config/master.key /config/.env
+```
+
+This will encrypt the contents of `/config/.env` using `/config/master.key`. A new
+file will then be generated at `/config/.env.enc` with your encrypted secrets.
+
+You must then provide the proper options to your adapters to enable encryption.
+
+```elixir
+{Exenv.Adapters.Dotenv, [file: "path/to/.env.enc", encryption: true]}
+```
+
+The above will attempt to decrypt `"path/to/.env.enc"` using the contents of the
+`"MASTER_KEY"` env var. Alternatively, you can also provide a direct path to the
+master key file.
+
+```elixir
+{Exenv.Adapters.Dotenv, [file: "path/to/.env.enc", encryption: [master_key: "path/to/master.key"]]}
+```
+
+To edit your secrets, you just need to decrypt the original encrypted secrets, and
+rencrypt the edited file.
+
+```bash
+mix exenv.decrypt /config/master.key /config/.env.enc
+
+## Add to file
+
+mix exenv.encrypt /config/master.key /config/.env
 ```

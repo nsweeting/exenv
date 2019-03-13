@@ -13,7 +13,8 @@ defmodule Exenv.Adapters.Dotenv do
 
       System.get_env("KEY1")
 
-  By default, this adapter is set to start automatically on `Exenv` startup.
+  By default, this adapter is set to start automatically on `Exenv` startup. It
+  also has support for encrypted `.env` files.
 
   """
 
@@ -25,29 +26,21 @@ defmodule Exenv.Adapters.Dotenv do
   ## Options
     * `:file` - the file path in which to read the `.env` from. By default this
     is a `.env` file in your projects root directory.
+    * `:encryption` - options used to decrypt files. Please see `Exenv.read_file/2`
+    for the options available.
 
   """
   @impl true
   def load(opts) do
-    env_file = get_env_file(opts)
-
-    with {:ok, env_vars} <- parse(env_file) do
+    with {:ok, env_file} <- get_env_file(opts) do
+      env_vars = parse_raw(env_file)
       System.put_env(env_vars)
     end
   end
 
-
   defp get_env_file(opts) do
-    [file: File.cwd!() <> "/.env"]
-    |> Keyword.merge(opts)
-    |> Keyword.get(:file)
-  end
-
-  defp parse(env_file) do
-    with {:ok, binary} <- File.read(env_file) do
-      parsed_env_file = parse_raw(binary)
-      {:ok, parsed_env_file}
-    end
+    file = Keyword.get_lazy(opts, :file, fn -> File.cwd!() <> "/.env" end)
+    Exenv.read_file(file, opts)
   end
 
   defp parse_raw(binary) do

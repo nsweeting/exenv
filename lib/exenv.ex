@@ -32,6 +32,12 @@ defmodule Exenv do
         {Exenv, [adapters: [{Exenv.Adapters.Dotenv, [file: "path/to/.env"]}]]}
       ]
 
+  ## Encryption
+
+  Exenv has support for encryption out of the box. This allows you to keep an
+  encrypted secrets file checked into your repository. Please see `Exenv.Encryption`
+  for more details.
+
   """
 
   use Application
@@ -62,6 +68,46 @@ defmodule Exenv do
       id: Exenv.Supervisor,
       start: {Exenv.Supervisor, :start_link, [opts]}
     }
+  end
+
+  @doc """
+  Returns `{:ok, binary}`, where binary is a binary data object that contains the
+  contents of path, or `{:error, reason}` if an error occurs.
+
+  ## Options
+    * `:encryption` - options used to decrypt the binary result if required.
+
+    ```
+    # Decrypts the file using the MASTER_KEY env var
+    [encryption: true]
+
+    # Decrypts the file using the master key file
+    [encryption: [master_key: "/path/to/master.key"]]
+    ```
+
+  """
+  @spec read_file(binary(), keyword()) :: {:ok, binary} | {:error, any()}
+  def read_file(path, opts \\ []) do
+    try do
+      file = File.read!(path)
+      encryption = Keyword.get(opts, :encryption, false)
+
+      file =
+        if encryption do
+          encryption = if is_list(encryption), do: encryption, else: []
+
+          encryption
+          |> Keyword.get(:master_key)
+          |> Exenv.Encryption.get_master_key!()
+          |> Exenv.Encryption.decrypt_secrets!(path)
+        else
+          file
+        end
+
+      {:ok, file}
+    rescue
+      error -> {:error, error}
+    end
   end
 
   @doc """

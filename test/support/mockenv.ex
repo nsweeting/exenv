@@ -1,4 +1,4 @@
-defmodule Exenv.Adapters.Mockenv do
+defmodule Exenv.Support.Mockenv do
   defmacro __using__(_) do
     quote do
       use GenServer
@@ -31,10 +31,10 @@ defmodule Exenv.Adapters.Mockenv do
   end
 end
 
-defmodule Exenv.Adapters.Mockenv.One do
-  use Exenv.Adapters.Mockenv
+defmodule Exenv.Support.Mockenv.One do
+  use Exenv.Support.Mockenv
 end
 
-defmodule Exenv.Adapters.Mockenv.Two do
-  use Exenv.Adapters.Mockenv
+defmodule Exenv.Support.Mockenv.Two do
+  use Exenv.Support.Mockenv
 end

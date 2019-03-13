@@ -1,7 +1,7 @@
 defmodule Exenv.MixProject do
   use Mix.Project
 
-  @version "0.2.1"
+  @version "0.3.0"
 
   def project do
     [
@@ -10,6 +10,7 @@ defmodule Exenv.MixProject do
       elixir: "~> 1.7",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
+      name: "Exenv",
       description: description(),
       package: package(),
       docs: docs()
@@ -50,7 +51,8 @@ defmodule Exenv.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ex_doc, "~> 0.19", only: :dev, runtime: false}
+      {:ex_doc, "~> 0.19", only: :dev, runtime: false},
+      {:dialyxir, "~> 0.5.0", only: [:dev], runtime: false}
     ]
   end
 end
