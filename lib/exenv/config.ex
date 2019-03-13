@@ -3,6 +3,7 @@ defmodule Exenv.Config do
 
   @default_config [
     start_on_application: true,
+    encryption: false,
     adapters: [
       {Exenv.Adapters.Dotenv, []}
     ]

@@ -6,6 +6,8 @@ defmodule Exenv.Adapters.DotenvTest do
   alias Exenv.Adapters.Dotenv
 
   @test_dotenv File.cwd!() <> "/test/fixtures/dotenv.env"
+  @test_enc_dotenv File.cwd!() <> "/test/fixtures/dotenv.env.enc"
+  @test_master_key File.cwd!() <> "/test/fixtures/master.key"
   @test_vars [
     {"GOOD_KEY1", "foo"},
     {"GOOD_KEY2", "bar"},
@@ -36,11 +38,29 @@ defmodule Exenv.Adapters.DotenvTest do
     end
 
     test "will return an error tuple when the file doesnt exist" do
-      assert Dotenv.load(file: "bad_file.env") == {:error, :enoent}
+      assert {:error, %File.Error{}} = Dotenv.load(file: "bad_file.env")
     end
 
     test "will return an error tuple when the file is a directory" do
-      assert Dotenv.load(file: "test") == {:error, :eisdir}
+      assert {:error, %File.Error{}} = Dotenv.load(file: "test")
+    end
+
+    test "will set env vars from a specified encrypted dotenv file using a master key file" do
+      refute_vars(@test_vars)
+
+      Dotenv.load(file: @test_enc_dotenv, encryption: [master_key: @test_master_key])
+
+      assert_vars(@test_vars)
+    end
+
+    test "will set env vars from a specified encrypted dotenv file using a MASTER_KEY env var" do
+      refute_vars(@test_vars)
+      master_key = File.read!(@test_master_key)
+      System.put_env("MASTER_KEY", master_key)
+
+      Dotenv.load(file: @test_enc_dotenv, encryption: true)
+
+      assert_vars(@test_vars)
     end
   end
 end

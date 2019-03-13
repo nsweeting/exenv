@@ -28,7 +28,7 @@ defmodule Exenv.Server do
   @doc false
   @impl true
   def init(config) do
-    config |> get_autoload_adapters() |> Exenv.load()
+    autoload_adapters(config)
     {:ok, config}
   end
 
@@ -44,12 +44,11 @@ defmodule Exenv.Server do
     {:reply, results, config}
   end
 
-  defp get_autoload_adapters(config) do
-    adapters = Keyword.get(config, :adapters, [])
-
-    Enum.filter(adapters, fn {_, opts} ->
-      Keyword.get(opts, :autoload, true)
-    end)
+  defp autoload_adapters(config) do
+    config
+    |> Keyword.get(:adapters, [])
+    |> Enum.filter(fn {_, opts} -> Keyword.get(opts, :autoload, true) end)
+    |> Exenv.load()
   end
 
   defp do_load(config) do

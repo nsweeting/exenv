@@ -51,6 +51,20 @@ defmodule Exenv.Adapter do
       end
 
   And thats it! We can know start using our new adapter.
+
+  ## Reading Files
+
+  If your adapter reads files in order to load env vars, it is recommended that
+  `Exenv.read_file/2` is used. This will enabled support for secrets encryption.
+  If a user passes the one of the following with your options, the file will
+  be automatically decrypted.
+
+        # Decrypts the file using MASTER_KEY env var
+        [encryption: true]
+
+        # Decrypts the file using a master key file
+        [encryption: [master_key: "/path/to/master.key"]]
+
   """
 
   @doc """

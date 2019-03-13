@@ -18,8 +18,8 @@ defmodule ExenvTest do
     test "will load env vars from the adapters" do
       setup_exenv(
         adapters: [
-          {Exenv.Adapters.Mockenv.One, [autoload: false, env_vars: [{"FOO", "bar"}]]},
-          {Exenv.Adapters.Mockenv.Two, [autoload: false, env_vars: [{"BAR", "baz"}]]}
+          {Exenv.Support.Mockenv.One, [autoload: false, env_vars: [{"FOO", "bar"}]]},
+          {Exenv.Support.Mockenv.Two, [autoload: false, env_vars: [{"BAR", "baz"}]]}
         ]
       )
 
@@ -35,8 +35,8 @@ defmodule ExenvTest do
 
       setup_exenv(
         adapters: [
-          {Exenv.Adapters.Mockenv.One, [autoload: true, env_vars: [{"FOO", "bar"}]]},
-          {Exenv.Adapters.Mockenv.Two, [autoload: true, env_vars: [{"BAR", "baz"}]]}
+          {Exenv.Support.Mockenv.One, [autoload: true, env_vars: [{"FOO", "bar"}]]},
+          {Exenv.Support.Mockenv.Two, [autoload: true, env_vars: [{"BAR", "baz"}]]}
         ]
       )
 
@@ -46,13 +46,13 @@ defmodule ExenvTest do
     test "will return the results of each adapter" do
       setup_exenv(
         adapters: [
-          {Exenv.Adapters.Mockenv.One, []},
-          {Exenv.Adapters.Mockenv.Two, []}
+          {Exenv.Support.Mockenv.One, []},
+          {Exenv.Support.Mockenv.Two, []}
         ]
       )
 
       result = Exenv.load()
-      assert result == [{Exenv.Adapters.Mockenv.One, :ok}, {Exenv.Adapters.Mockenv.Two, :ok}]
+      assert result == [{Exenv.Support.Mockenv.One, :ok}, {Exenv.Support.Mockenv.Two, :ok}]
     end
   end
 end

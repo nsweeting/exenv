@@ -2,6 +2,8 @@ defmodule Exenv.Test do
   import ExUnit.Assertions, only: [assert: 1, assert: 2, refute: 1]
   import ExUnit.Callbacks, only: [start_supervised: 1]
 
+  @dialyzer {:nowarn_function, refute_var: 2}
+
   @doc """
   Refutes that a list of env vars exist.
 
