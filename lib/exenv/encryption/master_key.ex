@@ -1,10 +1,11 @@
 defmodule Exenv.Encryption.MasterKey do
   @moduledoc false
 
-  alias Exenv.Encryption.Utils
+  alias Exenv.Utils
 
-  @spec create!(binary()) :: binary()
-  def create!(path) do
+  @spec create!(binary() | mfa()) :: binary()
+  def create!(path_or_mfa) do
+    path = Utils.build_path(path_or_mfa)
     ensure_empty(path)
     generate_key(path)
 
@@ -12,17 +13,19 @@ defmodule Exenv.Encryption.MasterKey do
   end
 
   @spec get!(any()) :: binary() | no_return()
-  def get!(path \\ nil)
+  def get!(path_or_mfa \\ nil)
 
-  def get!(path) when is_binary(path) do
-    File.read!(path)
-  end
-
-  def get!(_) do
+  def get!(nil) do
     case System.get_env("MASTER_KEY") do
       <<key::binary-size(43)>> -> key
       _ -> raise Exenv.Error, "MASTER_KEY env variable missing"
     end
+  end
+
+  def get!(path) do
+    path
+    |> Utils.build_path()
+    |> File.read!()
   end
 
   defp ensure_empty(path) do

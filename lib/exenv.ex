@@ -42,6 +42,8 @@ defmodule Exenv do
 
   use Application
 
+  alias Exenv.Utils
+
   @type on_load :: [{Exenv.Adapter.t(), Exenv.Adapter.result()}]
 
   @impl true
@@ -74,6 +76,9 @@ defmodule Exenv do
   Returns `{:ok, binary}`, where binary is a binary data object that contains the
   contents of path, or `{:error, reason}` if an error occurs.
 
+  You can optionally pass an mfa `{module, function, args}` that will be evaluated
+  and should return the intended path. This allows for runtime setup.
+
   ## Options
     * `:encryption` - options used to decrypt the binary result if required.
 
@@ -86,10 +91,10 @@ defmodule Exenv do
     ```
 
   """
-  @spec read_file(binary(), keyword()) :: {:ok, binary} | {:error, any()}
-  def read_file(path, opts \\ []) do
+  @spec read_file(binary() | mfa(), keyword()) :: {:ok, binary} | {:error, any()}
+  def read_file(path_or_mfa, opts \\ []) do
     try do
-      file = File.read!(path)
+      path = Utils.build_path(path_or_mfa)
       encryption = Keyword.get(opts, :encryption, false)
 
       file =
@@ -101,7 +106,7 @@ defmodule Exenv do
           |> Exenv.Encryption.get_master_key!()
           |> Exenv.Encryption.decrypt_secrets!(path)
         else
-          file
+          File.read!(path)
         end
 
       {:ok, file}

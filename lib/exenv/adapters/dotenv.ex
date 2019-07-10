@@ -24,10 +24,10 @@ defmodule Exenv.Adapters.Dotenv do
   Loads the system env vars from a `.env` specified in the options.
 
   ## Options
-    * `:file` - the file path in which to read the `.env` from. By default this
-    is a `.env` file in your projects root directory.
-    * `:encryption` - options used to decrypt files. Please see `Exenv.read_file/2`
-    for the options available.
+    * `:file` - The file path or mfa that evaluates to a file path in which to
+      read the `.env` from. By default this is a `.env` file in your projects root directory.
+    * `:encryption` - Options used to decrypt files. Please see `Exenv.read_file/2`
+      for the options available.
 
   """
   @impl true

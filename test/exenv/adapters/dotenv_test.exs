@@ -30,6 +30,14 @@ defmodule Exenv.Adapters.DotenvTest do
       assert_vars(@test_vars)
     end
 
+    test "will set env vars from an mfa" do
+      refute_vars(@test_vars)
+
+      Dotenv.load(file: {__MODULE__, :test_dotenv, []})
+
+      assert_vars(@test_vars)
+    end
+
     test "will ignore bad lines in a dotenv file" do
       Dotenv.load(file: @test_dotenv)
 
@@ -53,6 +61,17 @@ defmodule Exenv.Adapters.DotenvTest do
       assert_vars(@test_vars)
     end
 
+    test "will set env vars from an mfa file using a master key mfa" do
+      refute_vars(@test_vars)
+
+      Dotenv.load(
+        file: {__MODULE__, :test_enc_dotenv, []},
+        encryption: [master_key: {__MODULE__, :test_master_key, []}]
+      )
+
+      assert_vars(@test_vars)
+    end
+
     test "will set env vars from a specified encrypted dotenv file using a MASTER_KEY env var" do
       refute_vars(@test_vars)
       master_key = File.read!(@test_master_key)
@@ -62,5 +81,17 @@ defmodule Exenv.Adapters.DotenvTest do
 
       assert_vars(@test_vars)
     end
+  end
+
+  def test_dotenv do
+    @test_dotenv
+  end
+
+  def test_enc_dotenv do
+    @test_enc_dotenv
+  end
+
+  def test_master_key do
+    @test_master_key
   end
 end

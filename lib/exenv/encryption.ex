@@ -39,16 +39,16 @@ defmodule Exenv.Encryption do
 
   Returns the path to the new encrypted file.
   """
-  @spec encrypt_secrets!(binary(), binary()) :: binary() | no_return()
-  defdelegate encrypt_secrets!(key, path), to: Exenv.Encryption.Secrets, as: :encrypt!
+  @spec encrypt_secrets!(binary(), binary() | mfa()) :: binary() | no_return()
+  defdelegate encrypt_secrets!(key, path_or_mfa), to: Exenv.Encryption.Secrets, as: :encrypt!
 
   @doc """
   Decrypts the secrets at `path` using `key`.
 
   Returns the decrypted secrets.
   """
-  @spec decrypt_secrets!(binary(), binary()) :: binary() | no_return()
-  defdelegate decrypt_secrets!(key, path), to: Exenv.Encryption.Secrets, as: :decrypt!
+  @spec decrypt_secrets!(binary(), binary() | mfa()) :: binary() | no_return()
+  defdelegate decrypt_secrets!(key, path_or_mfa), to: Exenv.Encryption.Secrets, as: :decrypt!
 
   @doc """
   Attempts to get the master key.
@@ -57,13 +57,13 @@ defmodule Exenv.Encryption do
   it will get the contents of the env var `"MASTER_KEY"`.
   """
   @spec get_master_key!(any()) :: binary() | no_return()
-  defdelegate get_master_key!(path \\ nil), to: Exenv.Encryption.MasterKey, as: :get!
+  defdelegate get_master_key!(path_or_mfa \\ nil), to: Exenv.Encryption.MasterKey, as: :get!
 
   @doc """
   Creates a master key at `path`.
 
   Returns the path to the new master key file.
   """
-  @spec create_master_key!(binary()) :: binary() | no_return()
-  defdelegate create_master_key!(path), to: Exenv.Encryption.MasterKey, as: :create!
+  @spec create_master_key!(binary() | mfa()) :: binary() | no_return()
+  defdelegate create_master_key!(path_or_mfa), to: Exenv.Encryption.MasterKey, as: :create!
 end

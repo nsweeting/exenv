@@ -1,7 +1,7 @@
 defmodule Exenv.Encryption.Secrets do
   @moduledoc false
 
-  alias Exenv.Encryption.Utils
+  alias Exenv.Utils
 
   @aes_block_size 16
   @secrets_file_type ".enc"
@@ -11,9 +11,10 @@ defmodule Exenv.Encryption.Secrets do
     path <> @secrets_file_type
   end
 
-  @spec encrypt!(binary(), binary()) :: binary() | no_return()
-  def encrypt!(key, path) do
+  @spec encrypt!(binary(), binary() | mfa()) :: binary() | no_return()
+  def encrypt!(key, path_or_mfa) do
     key = Utils.decode(key)
+    path = Utils.build_path(path_or_mfa)
     secrets = File.read!(path)
     encrypted_path = encrypted_path(path)
     init_vector = :crypto.strong_rand_bytes(16)
@@ -32,9 +33,10 @@ defmodule Exenv.Encryption.Secrets do
     end
   end
 
-  @spec decrypt!(binary(), binary()) :: binary() | no_return()
-  def decrypt!(key, path) do
-    path
+  @spec decrypt!(binary(), binary() | mfa()) :: binary() | no_return()
+  def decrypt!(key, path_or_mfa) do
+    path_or_mfa
+    |> Utils.build_path()
     |> File.read!()
     |> String.split("|")
     |> Enum.map(&String.trim/1)
