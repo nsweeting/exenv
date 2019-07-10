@@ -101,6 +101,20 @@ You must then manually load all env vars from your defined adapters:
 Exenv.load()
 ```
 
+## Runtime path evaluation
+
+Any location where you pass a file path you can choose to instead pass an mfa
+which will be run and should evaluate to a proper file path. This allows for easier
+runtime setup of files.
+
+```elixir
+config :exenv, [
+  adapters: [
+    {Exenv.Adapters.Dotenv, [file: {MyApp, :get_dotenv, []}]}
+  ]
+]
+```
+
 ## Encryption
 
 Exenv has secrets encryption out of the box. Support will depend on the whether

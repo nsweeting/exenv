@@ -18,6 +18,13 @@ defmodule Exenv.EncryptionTest do
       assert File.exists?(key_path)
     end
 
+    test "will create a master.key file using an mfa" do
+      key_path = {__MODULE__, :master_key, []} |> Encryption.create_master_key!()
+
+      assert is_binary(key_path)
+      assert File.exists?(key_path)
+    end
+
     test "will create a valid key that can be used to encrypt data" do
       key_path = (temp_path() <> "master.key") |> Encryption.create_master_key!()
       key = File.read!(key_path)
@@ -55,6 +62,13 @@ defmodule Exenv.EncryptionTest do
       assert Encryption.get_master_key!(key_path) == key
     end
 
+    test "will fetch the master key from an mfa" do
+      key_path = {__MODULE__, :master_key, []} |> Encryption.create_master_key!()
+      key = File.read!(key_path)
+
+      assert Encryption.get_master_key!(key_path) == key
+    end
+
     test "will fetch the MASTER_KEY env variable if path is not valid" do
       random_key = random_key()
       System.put_env("MASTER_KEY", random_key)
@@ -69,5 +83,9 @@ defmodule Exenv.EncryptionTest do
         Encryption.get_master_key!(key_path)
       end
     end
+  end
+
+  def master_key do
+    temp_path() <> "master.key"
   end
 end
