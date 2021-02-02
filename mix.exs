@@ -1,7 +1,7 @@
 defmodule Exenv.MixProject do
   use Mix.Project
 
-  @version "0.4.0"
+  @version "0.4.1"
 
   def project do
     [
@@ -20,7 +20,7 @@ defmodule Exenv.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger],
+      extra_applications: [:logger, :crypto],
       mod: {Exenv, []}
     ]
   end
